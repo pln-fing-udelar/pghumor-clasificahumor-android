@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="TypographyDashes">
+    <integer name="ga_sessionTimeout">30</integer>
+
+    <!-- Enable automatic Activity measurement -->
+    <bool name="ga_autoActivityTracking">true</bool>
+    <string name="ga_logLevel">verbose</string>
+
+    <!--  The following value should be replaced with correct property id. -->
+    <string name="ga_trackingId">UA-34392230-5</string>
+    <string name="ga_dispatchPeriod">3</string>
+    <string name="ga_autoActivityTracking">true</string>
+</resources>
