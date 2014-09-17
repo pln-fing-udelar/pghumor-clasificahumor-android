@@ -31,16 +31,16 @@ public abstract class SingleFragmentActivity extends FragmentActivity {
 
     public static final String CONNECTIVITY_CHANGE_INTENT_NAMESPACE = MainActivity.class.getPackage().getName() + ".CONNECTIVITY_CHANGE";
 
-    private IntentFilter mIntentFilter = new IntentFilter(CONNECTIVITY_CHANGE_INTENT_NAMESPACE);
+    private final IntentFilter mIntentFilter = new IntentFilter(CONNECTIVITY_CHANGE_INTENT_NAMESPACE);
 
-    private BroadcastReceiver mReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             verifyConnectionInUi(context);
         }
     };
 
-    public void verifyConnectionInUi(final Context context) {
+    private void verifyConnectionInUi(final Context context) {
         if (context instanceof Activity) {
             Crouton.cancelAllCroutons();
 
@@ -59,7 +59,7 @@ public abstract class SingleFragmentActivity extends FragmentActivity {
         }
     }
 
-    public boolean isConnected(Context context) {
+    private boolean isConnected(Context context) {
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         return activeNetwork != null && activeNetwork.isConnectedOrConnecting();

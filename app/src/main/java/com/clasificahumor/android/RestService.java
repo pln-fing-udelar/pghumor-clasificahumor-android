@@ -12,9 +12,9 @@ import retrofit.http.Query;
 **/
 public class RestService {
 
-    private Service service;
+    private final Service service;
 
-    private static RestService instance = new RestService();
+    private static final RestService instance = new RestService();
 
     private RestService() {
         RestAdapter restAdapter = new RestAdapter.Builder()
