@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -13,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
@@ -42,6 +42,8 @@ public class MainFragment extends Fragment {
     TextView mCalificacionText;
     @InjectView(R.id.wrapper_calificacion)
     LinearLayout mWrapperCalificacion;
+    @InjectView(R.id.progressBar)
+    ProgressBar mProgressBar;
 
     private List<Tweet> chistes;
     private int index = 0;
@@ -63,20 +65,7 @@ public class MainFragment extends Fragment {
             ponerChisteEnUI();
         }
 
-        if (chistes == null) {
-            RestService.getInstance().getService().obtenerTresChistes(new Callback<List<Tweet>>() {
-                @Override
-                public void success(List<Tweet> tweets, Response response) {
-                    chistes = tweets;
-                    ponerChisteEnUI();
-                }
-
-                @Override
-                public void failure(RetrofitError error) {
-                    error.printStackTrace();
-                }
-            });
-        }
+        onConnected();
 
         mEstrellas.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             @Override
@@ -135,9 +124,29 @@ public class MainFragment extends Fragment {
         return view;
     }
 
+    public void onConnected() {
+        if (chistes == null) {
+            RestService.getInstance().getService().obtenerTresChistes(new Callback<List<Tweet>>() {
+                @Override
+                public void success(List<Tweet> tweets, Response response) {
+                    chistes = tweets;
+                    ponerChisteEnUI();
+                }
+
+                @Override
+                public void failure(RetrofitError error) {
+                    error.printStackTrace();
+                }
+            });
+        }
+
+    }
+
     private void ponerChisteEnUI() {
         if (chistes != null) {
             mChiste.setText(chistes.get(index).getText_tweet());
+            mChiste.setVisibility(View.VISIBLE);
+            mProgressBar.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -152,7 +161,7 @@ public class MainFragment extends Fragment {
     }
 
     private void votar(String voto) {
-        if (chistes.size() > 0) {
+        if (chistes != null) {
             final int indexViejo = index;
 
             RestService.getInstance().getService().obtenerChisteNuevo(

@@ -40,11 +40,13 @@ public abstract class SingleFragmentActivity extends FragmentActivity {
         }
     };
 
-    public static void verifyConnectionInUi(final Context context) {
+    public void verifyConnectionInUi(final Context context) {
         if (context instanceof Activity) {
             Crouton.cancelAllCroutons();
 
-            if (!isConnected(context)) {
+            if (isConnected(context)) {
+                onConnected();
+            } else {
                 Configuration configuration = new Configuration.Builder()
                         .setDuration(Configuration.DURATION_INFINITE)
                         .build();
@@ -57,11 +59,13 @@ public abstract class SingleFragmentActivity extends FragmentActivity {
         }
     }
 
-    public static boolean isConnected(Context context) {
+    public boolean isConnected(Context context) {
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
     }
+
+    protected abstract void onConnected();
 
     protected abstract Fragment createFragment();
 

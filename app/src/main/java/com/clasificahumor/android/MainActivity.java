@@ -4,8 +4,18 @@ import android.support.v4.app.Fragment;
 
 public class MainActivity extends SingleFragmentActivity {
 
+    MainFragment fragment;
+
     @Override
     protected Fragment createFragment() {
-        return new MainFragment();
+        fragment = new MainFragment();
+        return fragment;
+    }
+
+    @Override
+    protected void onConnected() {
+        if (fragment != null) {
+            fragment.onConnected();
+        }
     }
 }
