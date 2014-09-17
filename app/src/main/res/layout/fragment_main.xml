@@ -17,10 +17,11 @@
         <TextView
             android:id="@+id/chiste"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="100dp"
+            android:gravity="center"
             android:layout_gravity="center"
             android:layout_marginBottom="20dp"
-            tools:text="Este es un chiste" />
+            tools:text="Este es un chiste muy pero muy muy muy muy muy muy muy largo. Consta de 140 caracteres. No sé que más poner acá. Un saludo a toda mi gente." />
 
         <RatingBar
             android:id="@+id/estrellas"

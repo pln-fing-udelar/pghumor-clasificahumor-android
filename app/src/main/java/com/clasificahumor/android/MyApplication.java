@@ -14,8 +14,6 @@ public class MyApplication extends Application {
 
     private static MyApplication instance;
 
-    private boolean appRateCalled;
-
     public MyApplication() {
         super();
         instance = this;
