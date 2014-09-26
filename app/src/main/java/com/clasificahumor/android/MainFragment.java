@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v4.app.Fragment;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -144,7 +145,11 @@ public class MainFragment extends Fragment {
 
     private void ponerChisteEnUI() {
         if (chistes != null) {
-            mChiste.setText(chistes.get(index).getText_tweet());
+            String chiste = chistes.get(index).getText_tweet();
+            if (chiste != null) {
+                chiste = Html.fromHtml(chiste).toString();
+                mChiste.setText(chiste);
+            }
             mChiste.setVisibility(View.VISIBLE);
             mProgressBar.setVisibility(View.INVISIBLE);
         }
