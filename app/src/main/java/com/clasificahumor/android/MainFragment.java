@@ -23,6 +23,8 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -34,6 +36,8 @@ public class MainFragment extends Fragment {
 
     private static final String CHISTES_KEY = "chistes";
     private static final String INDEX_KEY = "index";
+
+    private static final String MENSAJE_ERROR_COMUNICACION = "Ups... ocurrió un error al intentar comunicarse";
 
     @InjectView(R.id.chiste)
     TextView mChiste;
@@ -48,6 +52,8 @@ public class MainFragment extends Fragment {
 
     private List<Tweet> chistes;
     private int index = 0;
+
+    private boolean obteniendoPrimerosChistes = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -126,16 +132,20 @@ public class MainFragment extends Fragment {
     }
 
     public void onConnected() {
-        if (chistes == null) {
+        if (chistes == null && !obteniendoPrimerosChistes) {
+            obteniendoPrimerosChistes = true;
             RestService.getInstance().getService().obtenerTresChistes(new Callback<List<Tweet>>() {
                 @Override
                 public void success(List<Tweet> tweets, Response response) {
+                    obteniendoPrimerosChistes = false;
                     chistes = tweets;
                     ponerChisteEnUI();
                 }
 
                 @Override
                 public void failure(RetrofitError error) {
+                    obteniendoPrimerosChistes = false;
+                    Crouton.makeText(getActivity(), MENSAJE_ERROR_COMUNICACION, Style.ALERT).show();
                     error.printStackTrace();
                 }
             });
@@ -182,6 +192,7 @@ public class MainFragment extends Fragment {
 
                         @Override
                         public void failure(RetrofitError error) {
+                            Crouton.makeText(getActivity(), MENSAJE_ERROR_COMUNICACION, Style.ALERT).show();
                             error.printStackTrace();
                         }
                     });
@@ -194,6 +205,7 @@ public class MainFragment extends Fragment {
 
                 @Override
                 public void failure(RetrofitError error) {
+                    Crouton.makeText(getActivity(), MENSAJE_ERROR_COMUNICACION, Style.ALERT).show();
                     error.printStackTrace();
                 }
             });
