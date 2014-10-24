@@ -37,6 +37,8 @@ public class MainFragment extends Fragment {
     private static final String CHISTES_KEY = "chistes";
     private static final String INDEX_KEY = "index";
 
+    private static final String SESSION_KEY = "sesion";
+
     private static final String MENSAJE_ERROR_COMUNICACION = "Ups... ocurrió un error al intentar comunicarse";
 
     @InjectView(R.id.chiste)
@@ -117,9 +119,11 @@ public class MainFragment extends Fragment {
                                 }
 
                                 public void onFinish() {
-                                    mWrapperCalificacion.setBackgroundResource(R.drawable.background_calificacion);
-                                    mCalificacionText.setText("¡Votá!");
-                                    mEstrellas.setRating(0);
+                                    if (MainFragment.this.isAdded()) {
+                                        mWrapperCalificacion.setBackgroundResource(R.drawable.background_calificacion);
+                                        mCalificacionText.setText("¡Votá!");
+                                        mEstrellas.setRating(0);
+                                    }
                                 }
                             }.start();
                         }
@@ -137,16 +141,20 @@ public class MainFragment extends Fragment {
             RestService.getInstance().getService().obtenerTresChistes(new Callback<List<Tweet>>() {
                 @Override
                 public void success(List<Tweet> tweets, Response response) {
-                    obteniendoPrimerosChistes = false;
-                    chistes = tweets;
-                    ponerChisteEnUI();
+                    if (MainFragment.this.isAdded()) {
+                        obteniendoPrimerosChistes = false;
+                        chistes = tweets;
+                        ponerChisteEnUI();
+                    }
                 }
 
                 @Override
                 public void failure(RetrofitError error) {
-                    obteniendoPrimerosChistes = false;
-                    Crouton.makeText(getActivity(), MENSAJE_ERROR_COMUNICACION, Style.ALERT).show();
-                    error.printStackTrace();
+                    if (MainFragment.this.isAdded()) {
+                        obteniendoPrimerosChistes = false;
+                        Crouton.makeText(getActivity(), MENSAJE_ERROR_COMUNICACION, Style.ALERT).show();
+                        error.printStackTrace();
+                    }
                 }
             });
         }
@@ -192,8 +200,10 @@ public class MainFragment extends Fragment {
 
                         @Override
                         public void failure(RetrofitError error) {
-                            Crouton.makeText(getActivity(), MENSAJE_ERROR_COMUNICACION, Style.ALERT).show();
-                            error.printStackTrace();
+                            if (MainFragment.this.isAdded()) {
+                                Crouton.makeText(getActivity(), MENSAJE_ERROR_COMUNICACION, Style.ALERT).show();
+                                error.printStackTrace();
+                            }
                         }
                     });
 
@@ -205,8 +215,10 @@ public class MainFragment extends Fragment {
 
                 @Override
                 public void failure(RetrofitError error) {
-                    Crouton.makeText(getActivity(), MENSAJE_ERROR_COMUNICACION, Style.ALERT).show();
-                    error.printStackTrace();
+                    if (MainFragment.this.isAdded()) {
+                        Crouton.makeText(getActivity(), MENSAJE_ERROR_COMUNICACION, Style.ALERT).show();
+                        error.printStackTrace();
+                    }
                 }
             });
 

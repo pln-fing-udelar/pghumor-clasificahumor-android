@@ -1,9 +1,16 @@
 package com.clasificahumor.android;
 
+import com.squareup.okhttp.OkHttpClient;
+
+import java.net.CookieManager;
+import java.net.CookiePolicy;
 import java.util.List;
 
 import retrofit.Callback;
+import retrofit.RequestInterceptor;
 import retrofit.RestAdapter;
+import retrofit.client.Client;
+import retrofit.client.OkClient;
 import retrofit.http.GET;
 import retrofit.http.Query;
 
@@ -17,7 +24,13 @@ public class RestService {
     private static final RestService instance = new RestService();
 
     private RestService() {
+        CookieManager cookieManager = new CookieManager(new PersistentCookieStore(MyApplication.getContext()), CookiePolicy.ACCEPT_ALL);
+        OkHttpClient okHttpClient = new OkHttpClient();
+        okHttpClient.setCookieHandler(cookieManager);
+        Client client = new OkClient(okHttpClient);
+
         RestAdapter restAdapter = new RestAdapter.Builder()
+                .setClient(client)
                 .setEndpoint("http://clasificahumor.com")
                 .setLogLevel(RestAdapter.LogLevel.FULL)
                 .build();
